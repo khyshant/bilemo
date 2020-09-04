@@ -2,19 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fc4ab864-d8ac-496a-b097-e575a4e8070f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/config/packages/sensio_framework_extra.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/bilemo.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/bilemo.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config/bundles.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/bundles.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Brand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Brand.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Category.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Category.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/Customer.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Customer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Image.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Image.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Product.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Product.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/CustomerRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/CustomerRepository.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/symfony.lock" beforeDir="false" afterPath="$PROJECT_DIR$/symfony.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -87,6 +82,15 @@
       <path value="$PROJECT_DIR$/vendor/symfony/maker-bundle" />
       <path value="$PROJECT_DIR$/vendor/nikic/php-parser" />
       <path value="$PROJECT_DIR$/vendor/sensio/framework-extra-bundle" />
+      <path value="$PROJECT_DIR$/vendor/symfony/property-access" />
+      <path value="$PROJECT_DIR$/vendor/symfony/property-info" />
+      <path value="$PROJECT_DIR$/vendor/symfony/security-core" />
+      <path value="$PROJECT_DIR$/vendor/symfony/security-csrf" />
+      <path value="$PROJECT_DIR$/vendor/symfony/security-bundle" />
+      <path value="$PROJECT_DIR$/vendor/symfony/security-http" />
+      <path value="$PROJECT_DIR$/vendor/symfony/security-guard" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/doctrine-fixtures-bundle" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/data-fixtures" />
     </include_path>
   </component>
   <component name="ProjectId" id="1geYPclRfqYzpeNcYJLWDHfUvhv" />
@@ -95,11 +99,13 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="/var/www/html/prestashop/Dev_athezza" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="php.override.implement.member.chooser.php.doc" value="NONE" />
+    <property name="settings.editor.selected.configurable" value="reference.webide.settings.project.settings.php" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -112,7 +118,13 @@
       <updated>1598476501452</updated>
       <workItem from="1598476502753" duration="462000" />
       <workItem from="1598721590317" duration="5014000" />
-      <workItem from="1598785152255" duration="28017000" />
+      <workItem from="1598785152255" duration="28769000" />
+      <workItem from="1598872760136" duration="843000" />
+      <workItem from="1598873891629" duration="596000" />
+      <workItem from="1598995083164" duration="302000" />
+      <workItem from="1599044386533" duration="1834000" />
+      <workItem from="1599081096420" duration="5476000" />
+      <workItem from="1599216776207" duration="505000" />
     </task>
     <servers />
   </component>
@@ -120,17 +132,21 @@
     <option name="version" value="3" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="2693" y="234" width="441" height="652" key="#com.intellij.ide.util.MemberChooser" timestamp="1598828378399">
+    <state x="2693" y="234" width="441" height="652" key="#com.intellij.ide.util.MemberChooser" timestamp="1599132182564">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
-    <state x="2693" y="234" width="441" height="652" key="#com.intellij.ide.util.MemberChooser/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080" timestamp="1598828378399" />
+    <state x="2693" y="234" width="441" height="652" key="#com.intellij.ide.util.MemberChooser/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080" timestamp="1599132182564" />
     <state x="2637" y="311" width="524" height="491" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1598828155994">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
     <state x="2637" y="311" width="524" height="491" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080" timestamp="1598828155994" />
-    <state x="2627" y="334" width="424" height="491" key="FileChooserDialogImpl" timestamp="1598785509098">
+    <state x="2627" y="334" width="424" height="491" key="FileChooserDialogImpl" timestamp="1598873000761">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
-    <state x="2627" y="334" width="424" height="491" key="FileChooserDialogImpl/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080" timestamp="1598785509098" />
+    <state x="2627" y="334" width="424" height="491" key="FileChooserDialogImpl/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080" timestamp="1598873000761" />
+    <state x="2393" y="188" width="1022" height="737" key="SettingsEditor" timestamp="1599131065060">
+      <screen x="1920" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2393" y="188" width="1022" height="737" key="SettingsEditor/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080" timestamp="1599131065060" />
   </component>
 </project>

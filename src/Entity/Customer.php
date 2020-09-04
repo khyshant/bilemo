@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use App\Repository\CustomerRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -22,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Entity(repositoryClass=CustomerRepository::class)
  */
-class Customer implements UserLoaderInterface
+class Customer implements UserInterface
 {
     /**
      * @ORM\Id
@@ -188,9 +187,29 @@ class Customer implements UserLoaderInterface
         return $this;
     }
 
-    public function loadUserByUsername(string $username)
+/*method added by UserInterface*/
+    public function getRoles()
     {
-        // TODO: Implement loadUserByUsername() method.
+        // TODO: Implement getRoles() method.
     }
 
+    public function getPassword()
+    {
+        // TODO: Implement getPassword() method.
+    }
+
+    public function getSalt()
+    {
+        // TODO: Implement getSalt() method.
+    }
+
+    public function getUsername()
+    {
+        // TODO: Implement getUsername() method.
+    }
+
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
 }

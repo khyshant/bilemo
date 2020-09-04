@@ -19,6 +19,19 @@ class CustomerRepository extends ServiceEntityRepository
         parent::__construct($registry, Customer::class);
     }
 
+    public function loadCustomerByCustomername($usernameOrEmail)
+    {
+        return $this->createQuery(
+            'SELECT u
+                FROM App\Entity\Customer c
+                WHERE c.customername = :query
+                OR c.email = :query'
+        )
+            ->setParameter('query', $usernameOrEmail)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     // /**
     //  * @return Customer[] Returns an array of Customer objects
     //  */
