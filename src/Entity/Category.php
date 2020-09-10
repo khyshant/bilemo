@@ -27,15 +27,10 @@ class Category
 
     /**
      * @var string
-     * @ORM\Column(name="description", type="string", length=800, nullable=true)
+     * @ORM\Column(name="description", type="text", length=800, nullable=true)
      */
     private $description;
 
-    /**
-     * @var Collection
-     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="brand", orphanRemoval=true)
-     */
-    private $images;
 
     public function getId(): ?int
     {

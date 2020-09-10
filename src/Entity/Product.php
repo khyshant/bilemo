@@ -3,8 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ProductRepository::class)
@@ -50,17 +52,10 @@ class Product
 
     /**
      * @var string
-     * @ORM\Column(name="price", type="flloat", length=800, nullable=true)
+     * @ORM\Column(name="price", type="float", length=800, nullable=true)
      */
     private $price;
 
-    /**
-     * @var Collection
-     * @ORM\OneToMany(targetEntity="Image", mappedBy="Product", orphanRemoval=true, cascade={"persist"})
-     * @Assert\Count(min=1)
-     * @Assert\Valid
-     */
-    private $images;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Brand")
@@ -71,6 +66,12 @@ class Product
      * @ORM\ManyToOne(targetEntity="App\Entity\Category")
      */
     private $category;
+
+
+    public function __construct()
+    {
+
+    }
 
     public function getId(): ?int
     {
@@ -174,43 +175,6 @@ class Product
     }
 
     /**
-     * @return Collection
-     */
-    public function getImages(): Collection
-    {
-        return $this->images;
-    }
-
-    /**
-     * @param Image $image
-     */
-    public function addImage(Image $image)
-    {
-        $image->setTrick($this);
-        $this->images->add($image);
-    }
-
-    public function removeImage(Image $image)
-    {
-        $image->setTrick(null);
-        $this->images->removeElement($image);
-    }
-
-    /**
-     * @param Collection $images
-     */
-    public function setImages(Collection $images): void
-    {
-        $this->images = $images;
-        if ($this->images->contains($image)) {
-            $this->images->removeElement($image);
-            // set the owning side to null (unless already changed)
-            if ($image->getTrick() === $this) {
-                $image->setTrick(null);
-            }
-        }
-    }
-    /**
      * @return mixed
      */
     public function getBrand()
@@ -241,7 +205,5 @@ class Product
     {
         $this->category = $category;
     }
-
-
 
 }

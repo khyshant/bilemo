@@ -5,11 +5,12 @@ namespace App\Entity;
 use App\Repository\CustomerRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  *
- * @ORM\Table(name="user")
+ * @ORM\Table(name="customer")
  * @UniqueEntity(
  *    fields={"email"},
  *     message="l'email indiqué est déjà utilisé ..."
@@ -66,10 +67,12 @@ class Customer implements UserInterface
     private $company;
 
     /**
-     * @var collection
-     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="customer", orphanRemoval=true)
+     * @var string
+     *
+     * @ORM\Column(name="password", type="string", length=255)
+     * @Assert\Length(min ="8", minMessage="Votre mot de passe doit faire un minimum de 8 caractères")
      */
-    private $users;
+    private $password;
 
     public function getId(): ?int
     {
@@ -172,6 +175,14 @@ class Customer implements UserInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @param string $password
+     */
+    public function setPassword(string $password): void
+    {
+        $this->password = $password;
     }
 
     public function removeUser(User $user): self
