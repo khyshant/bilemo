@@ -198,15 +198,17 @@ class Customer implements UserInterface
         return $this;
     }
 
-/*method added by UserInterface*/
+    /*method added by UserInterface*/
     public function getRoles()
     {
         // TODO: Implement getRoles() method.
+        return ["ROLE_USER"];
     }
 
     public function getPassword()
     {
         // TODO: Implement getPassword() method.
+        return $this->password;
     }
 
     public function getSalt()
@@ -217,6 +219,7 @@ class Customer implements UserInterface
     public function getUsername()
     {
         // TODO: Implement getUsername() method.
+        return $this->customername;
     }
 
     public function eraseCredentials()
