@@ -5,32 +5,9 @@ security:
             entity:
                 # the class of the entity that represents users
                 class: 'App\Entity\Customer'
-    firewalls:
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
-        main:
-            pattern:      ^/
-            form_login:
-                login_path: login
-                check_path: login
-            logout:
-                path:       logout
-                target:     home
-
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#firewalls-authentication
-
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
-
-    # Easy way to control access for large sections of your site
-    # Note: Only the *first* access control that matches will be used
-    access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+                property: customername
     # added by me for configure security bundle
-    enable_authenticator_manager: true
+    enable_authenticator_manager: false
     encoders:
         # use your user class name here
         App\Entity\Customer:
@@ -38,3 +15,28 @@ security:
             # This value auto-selects the best possible hashing algorithm
             # (i.e. Sodium when available).
             algorithm: auto
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        login:
+            pattern: ^/api/login
+            stateless: true
+            anonymous: true
+            json_login:
+                username_path: customername
+                password_path: password
+                check_path: /api/login_check
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+        api:
+            pattern: ^/api
+            stateless: true
+            provider: users
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
+    access_control:
+        - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }

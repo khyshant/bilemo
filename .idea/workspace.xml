@@ -20,29 +20,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fc4ab864-d8ac-496a-b097-e575a4e8070f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/public/images/avatar/avatar1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/avatar/avatar2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/avatar/avatar3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/avatar/avatar4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/avatar/avatar5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/avatar/avatar6.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/avatar/avatar7.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/avatar/avatar8.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/logo.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/bilemo.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/bilemo.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config/packages/security.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/security.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DataFixtures/AppFixtures.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataFixtures/AppFixtures.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Brand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Brand.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Category.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Category.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/Customer.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Customer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Image.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Image.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Product.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Product.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony.lock" beforeDir="false" afterPath="$PROJECT_DIR$/symfony.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -121,10 +101,11 @@
       <path value="$PROJECT_DIR$/vendor/symfony/security-bundle" />
       <path value="$PROJECT_DIR$/vendor/symfony/security-http" />
       <path value="$PROJECT_DIR$/vendor/symfony/security-guard" />
-      <path value="$PROJECT_DIR$/vendor/doctrine/doctrine-fixtures-bundle" />
-      <path value="$PROJECT_DIR$/vendor/doctrine/data-fixtures" />
       <path value="$PROJECT_DIR$/vendor/symfony/validator" />
       <path value="$PROJECT_DIR$/vendor/symfony/translation-contracts" />
+      <path value="$PROJECT_DIR$/vendor/lexik/jwt-authentication-bundle" />
+      <path value="$PROJECT_DIR$/vendor/namshi/jose" />
+      <path value="$PROJECT_DIR$/vendor/lcobucci/jwt" />
     </include_path>
   </component>
   <component name="ProjectId" id="1geYPclRfqYzpeNcYJLWDHfUvhv" />
@@ -136,20 +117,21 @@
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/Controller" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="php.override.implement.member.chooser.php.doc" value="NONE" />
     <property name="settings.editor.selected.configurable" value="reference.webide.settings.project.settings.php" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/public" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/Controller" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/src/Repository" />
       <recent name="$PROJECT_DIR$/src/Entity" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/public" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -173,8 +155,29 @@
       <workItem from="1599496155191" duration="10761000" />
       <workItem from="1599590954019" duration="5352000" />
       <workItem from="1599673475708" duration="9113000" />
-      <workItem from="1599736236977" duration="1809000" />
+      <workItem from="1599736236977" duration="3306000" />
+      <workItem from="1599849603805" duration="9322000" />
+      <workItem from="1599903978650" duration="604000" />
+      <workItem from="1600004258729" duration="2551000" />
+      <workItem from="1600167713915" duration="2208000" />
+      <workItem from="1600205910685" duration="187000" />
+      <workItem from="1600254897576" duration="5181000" />
+      <workItem from="1600341630972" duration="28000" />
+      <workItem from="1600375428460" duration="5668000" />
+      <workItem from="1600426893949" duration="673000" />
+      <workItem from="1600802927948" duration="2984000" />
+      <workItem from="1600860540652" duration="1208000" />
+      <workItem from="1600899652411" duration="306000" />
+      <workItem from="1601322403019" duration="427000" />
     </task>
+    <task id="LOCAL-00001" summary="add lexik jwt">
+      <created>1600277721088</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1600277721088</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -192,6 +195,10 @@
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="add lexik jwt" />
+    <option name="LAST_COMMIT_MESSAGE" value="add lexik jwt" />
+  </component>
   <component name="WindowStateProjectService">
     <state x="2693" y="234" width="441" height="659" key="#com.intellij.ide.util.MemberChooser" timestamp="1599348007940">
       <screen x="1920" y="0" width="1920" height="1080" />
@@ -201,17 +208,26 @@
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
     <state x="2637" y="311" width="524" height="491" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080" timestamp="1599388445484" />
-    <state x="2627" y="334" width="424" height="491" key="FileChooserDialogImpl" timestamp="1599419255393">
+    <state x="2627" y="334" width="424" height="491" key="FileChooserDialogImpl" timestamp="1601322420115">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
-    <state x="2627" y="334" width="424" height="491" key="FileChooserDialogImpl/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080" timestamp="1599419255393" />
-    <state x="2328" y="188" width="1022" height="737" key="SettingsEditor" timestamp="1599499423234">
+    <state x="2627" y="334" width="424" height="491" key="FileChooserDialogImpl/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080" timestamp="1601322420115" />
+    <state x="2328" y="188" width="1022" height="737" key="SettingsEditor" timestamp="1599769891342">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
-    <state x="2328" y="188" width="1022" height="737" key="SettingsEditor/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080" timestamp="1599499423234" />
-    <state x="2068" y="127" width="1672" height="853" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1599736587411">
+    <state x="2328" y="188" width="1022" height="737" key="SettingsEditor/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080" timestamp="1599769891342" />
+    <state x="2499" y="275" width="800" height="563" key="Vcs.Push.Dialog.v2" timestamp="1600277726456">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
-    <state x="2068" y="127" width="1672" height="853" key="com.intellij.history.integration.ui.views.FileHistoryDialog/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080" timestamp="1599736587411" />
+    <state x="2499" y="275" width="800" height="563" key="Vcs.Push.Dialog.v2/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080" timestamp="1600277726456" />
+    <state x="2135" y="101" width="1477" height="1517" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1600812088627">
+      <screen x="1920" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2068" y="127" width="1672" height="853" key="com.intellij.history.integration.ui.views.FileHistoryDialog/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080" timestamp="1600382508610" />
+    <state x="2135" y="101" width="1477" height="1517" key="com.intellij.history.integration.ui.views.FileHistoryDialog/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@3840.0.1080.1920" timestamp="1600812088627" />
+    <state x="2110" y="116" width="1086" height="668" key="find.popup" timestamp="1600376426802">
+      <screen x="1920" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2110" y="116" width="1086" height="668" key="find.popup/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080" timestamp="1600376426802" />
   </component>
 </project>
