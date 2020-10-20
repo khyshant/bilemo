@@ -7,6 +7,7 @@ use App\Entity\Brand;
 use App\Entity\Category;
 use App\Entity\Customer;
 use App\Entity\Product;
+use App\Entity\User;
 use App\Repository\CustomerRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -69,30 +70,75 @@ class ProductController
             true);
     }
 
-/**
-* @Route(name="api_products_item_add", methods={"POST"})
-* @param Request $request
-* @param SerializerInterface $serializer
-* @param EntityManagerInterface $entityManager
-* @param UrlGeneratorInterface $urlGenerator
-* @return JsonResponse
-    */
-    public function post(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator): JsonResponse
-{
-    $customer = $this->security->getUser();
-    dump($customer);
-    /** @var $product Product*/
-    $product = $serializer->deserialize($request->getContent(), Product::class, 'json');
-    // a supprimer quand j'aurais le retour du token
-    $product->setBrand($entityManager->getRepository(Brand::class)->findOneBy([]));
-    $product->setCategory($entityManager->getRepository(Category::class)->findOneBy([]));
-    $entityManager->persist($product);
-    $entityManager->flush();
+    /**
+    * @Route(name="api_products_item_add", methods={"POST"})
+    * @param Request $request
+    * @param SerializerInterface $serializer
+    * @param EntityManagerInterface $entityManager
+    * @param UrlGeneratorInterface $urlGenerator
+    * @return JsonResponse
+        */
+        public function post(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator): JsonResponse
+    {
+        $customer = $this->security->getUser();
+        dump($customer);
+        /** @var $product Product*/
+        $product = $serializer->deserialize($request->getContent(), Product::class, 'json');
+        // a supprimer quand j'aurais le retour du token
+        $product->setBrand($entityManager->getRepository(Brand::class)->findOneBy([]));
+        $product->setCategory($entityManager->getRepository(Category::class)->findOneBy([]));
+        $entityManager->persist($product);
+        $entityManager->flush();
 
-    return new JsonResponse(
-        $serializer->serialize($product,"json", ["groups"=> "get"]),
-        JsonResponse::HTTP_CREATED,
-        ["Location" => $urlGenerator->generate("api_users_item", ["id" => $product->getId()])],
-        true);
-}
+        return new JsonResponse(
+            $serializer->serialize($product,"json", ["groups"=> "get"]),
+            JsonResponse::HTTP_CREATED,
+            ["Location" => $urlGenerator->generate("api_users_item", ["id" => $product->getId()])],
+            true);
+    }
+
+    /**
+     * @Route("/{id}",name="api_products_item_modify", methods={"PUT"})
+     * @IsGranted("edit",subject="user")
+     *
+     * @param Product $product
+     * @param Request $request
+     * @param SerializerInterface $serializer
+     * @param EntityManagerInterface $entityManager
+     * @return JsonResponse
+     */
+    public function put(Product $product, Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $customer = $this->security->getUser();
+        dump($customer);
+        /** @var $product Product*/
+        $serializer->deserialize($request->getContent(), Product::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE =>$product]);
+        // a supprimer quand j'aurais le retour du token
+        $product->setBrand($entityManager->getRepository(Brand::class)->findOneBy([]));
+        $product->setCategory($entityManager->getRepository(Category::class)->findOneBy([]));
+
+        $entityManager->flush();
+
+        return new JsonResponse(
+            null,
+            JsonResponse::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @Route("/{id}",name="api_products_item_delete", methods={"DELETE"})
+     * @param Product $product
+     * @param EntityManagerInterface $entityManager
+     * @return JsonResponse
+     */
+    public function delete(Product $product, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $customer = $this->security->getUser();
+        dump($customer);
+        $entityManager->remove($product);
+        $entityManager->flush();
+
+        return new JsonResponse(
+            null,
+            JsonResponse::HTTP_NO_CONTENT);
+    }
 }
