@@ -70,7 +70,7 @@ class ProductController
     }
 
 /**
-* @Route(name="api_users_item_add", methods={"POST"})
+* @Route(name="api_products_item_add", methods={"POST"})
 * @param Request $request
 * @param SerializerInterface $serializer
 * @param EntityManagerInterface $entityManager
