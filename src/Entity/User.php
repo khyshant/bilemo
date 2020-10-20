@@ -6,6 +6,7 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -17,6 +18,7 @@ class User
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"get"})
      */
     private $id;
 
@@ -29,6 +31,7 @@ class User
      * @var string
      * @Assert\NotNull()
      * @ORM\Column(name="lastname", type="string", length=255)
+     * @Groups({"get"})
      */
     private $lastname;
 
