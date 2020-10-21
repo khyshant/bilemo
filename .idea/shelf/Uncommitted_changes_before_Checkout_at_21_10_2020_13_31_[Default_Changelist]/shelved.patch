@@ -1,0 +1,335 @@
+Index: src/Controller/UserController.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?php\n\n\nnamespace App\\Controller;\n\nuse App\\Entity\\Customer;\nuse App\\Entity\\User;\nuse App\\Repository\\CustomerRepository;\nuse App\\Repository\\UserRepository;\nuse Doctrine\\ORM\\EntityManagerInterface;\nuse Symfony\\Component\\HttpFoundation\\Request;\nuse Symfony\\Component\\HttpFoundation\\JsonResponse;\nuse Symfony\\Component\\Routing\\Annotation\\Route;\nuse Symfony\\Component\\Routing\\Generator\\UrlGeneratorInterface;\nuse Symfony\\Component\\Serializer\\Normalizer\\AbstractNormalizer;\nuse Symfony\\Component\\Serializer\\SerializerInterface;\nuse Symfony\\Component\\Security\\Core\\Security as SecurityAlias;\nuse Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\IsGranted;\nuse Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Security;\n\n\n\n/**\n * Class BrandController\n * @package App\\Controller\n * @Route(\"/api/users\")\n */\nclass UserController\n{\n    /**\n     * @var SecurityAlias\n     */\n    private $security;\n\n    public function __construct(SecurityAlias $security)\n    {\n        $this->security = $security;\n    }\n\n    /**\n     * @Route(name=\"api_users_listing\", methods={\"GET\"})\n     * @param UserRepository $userRepository\n     * @param SerializerInterface $serializer\n     * @return JsonResponse\n     */\n    public function listing(UserRepository $userRepository, SerializerInterface $serializer): JsonResponse\n    {\n\n        $customer = $this->security->getUser();\n        dump($customer);\n        return new JsonResponse($serializer->serialize($userRepository->findAll(),\"json\", [\"groups\"=> \"get\"]),\n        JsonResponse::HTTP_OK,\n        [],\n        true);\n    }\n\n    /**\n     * @Route(\"/{id}\", name=\"api_users_item\", methods={\"GET\"})\n     * @param User $user\n     * @param SerializerInterface $serializer\n     * @return JsonResponse\n     */\n    public function item(User $user, SerializerInterface $serializer): JsonResponse\n    {\n        $customer = $this->security->getUser();\n        dump($customer);\n        return new JsonResponse($serializer->serialize($user,\"json\", [\"groups\"=> \"get\"]),\n            JsonResponse::HTTP_OK,\n            [],\n            true);\n    }\n\n    /**\n     * @Route(name=\"api_users_item_add\", methods={\"POST\"})\n     * @param Request $request\n     * @param SerializerInterface $serializer\n     * @param EntityManagerInterface $entityManager\n     * @param UrlGeneratorInterface $urlGenerator\n     * @return JsonResponse\n     */\n    public function post(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator): JsonResponse\n    {\n        $customer = $this->security->getUser();\n        dump($customer);\n        /** @var $user User*/\n        $user = $serializer->deserialize($request->getContent(), User::class, 'json');\n        // a supprimer quand j'aurais le retour du token\n        $user->setCustomer($entityManager->getRepository(Customer::class)->findOneBy([]));\n        $entityManager->persist($user);\n        $entityManager->flush();\n\n        return new JsonResponse(\n            $serializer->serialize($user,\"json\", [\"groups\"=> \"get\"]),\n            JsonResponse::HTTP_CREATED,\n            [\"Location\" => $urlGenerator->generate(\"api_users_item\", [\"id\" => $user->getId()])],\n            true);\n    }\n\n    /**\n     * @Route(\"/{id}\",name=\"api_users_item_modify\", methods={\"PUT\"})\n     * @IsGranted(\"item\",subject=\"user\")\n\n     *\n     * @param Request $request\n     * @param SerializerInterface $serializer\n     * @param EntityManagerInterface $entityManager\n     * @return JsonResponse\n     */\n    public function put(User $user, Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager): JsonResponse\n    {\n        $customer = $this->security->getUser();\n        dump($customer);\n        /** @var $user User*/\n        $serializer->deserialize($request->getContent(), User::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE =>$user]);\n        // a supprimer quand j'aurais le retour du token\n        $user->setCustomer($entityManager->getRepository(Customer::class)->findOneBy([]));\n\n        $entityManager->flush();\n\n        return new JsonResponse(\n            null,\n            JsonResponse::HTTP_NO_CONTENT);\n    }\n\n    /**\n     * @Route(\"/{id}\",name=\"api_users_item_delete\", methods={\"DELETE\"})\n     * @param Request $request\n     * @param SerializerInterface $serializer\n     * @param EntityManagerInterface $entityManager\n     * @return JsonResponse\n     */\n    public function delete(User $user, EntityManagerInterface $entityManager): JsonResponse\n    {\n        $customer = $this->security->getUser();\n        dump($customer);\n        $entityManager->remove($user);\n        $entityManager->flush();\n\n        return new JsonResponse(\n            null,\n            JsonResponse::HTTP_NO_CONTENT);\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/Controller/UserController.php	(revision dd9d15e84178b7997e20b990341411cfa14154f9)
++++ src/Controller/UserController.php	(date 1603233911747)
+@@ -56,14 +56,13 @@
+ 
+     /**
+      * @Route("/{id}", name="api_users_item", methods={"GET"})
++     * @IsGranted("item",subject="user",  statusCode=404, message="Post not found")
+      * @param User $user
+      * @param SerializerInterface $serializer
+      * @return JsonResponse
+      */
+     public function item(User $user, SerializerInterface $serializer): JsonResponse
+     {
+-        $customer = $this->security->getUser();
+-        dump($customer);
+         return new JsonResponse($serializer->serialize($user,"json", ["groups"=> "get"]),
+             JsonResponse::HTTP_OK,
+             [],
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"BranchesTreeState\">\n    <expand>\n      <path>\n        <item name=\"ROOT\" type=\"e8cecc67:BranchNodeDescriptor\" />\n        <item name=\"LOCAL_ROOT\" type=\"e8cecc67:BranchNodeDescriptor\" />\n      </path>\n      <path>\n        <item name=\"ROOT\" type=\"e8cecc67:BranchNodeDescriptor\" />\n        <item name=\"REMOTE_ROOT\" type=\"e8cecc67:BranchNodeDescriptor\" />\n      </path>\n      <path>\n        <item name=\"ROOT\" type=\"e8cecc67:BranchNodeDescriptor\" />\n        <item name=\"REMOTE_ROOT\" type=\"e8cecc67:BranchNodeDescriptor\" />\n        <item name=\"GROUP_NODE:origin\" type=\"e8cecc67:BranchNodeDescriptor\" />\n      </path>\n    </expand>\n    <select />\n  </component>\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"fc4ab864-d8ac-496a-b097-e575a4e8070f\" name=\"Default Changelist\" comment=\"\">\n      <change beforePath=\"$PROJECT_DIR$/composer.json\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/composer.json\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/composer.lock\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/composer.lock\" afterDir=\"false\" />\n    </list>\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"ComposerSettings\" doNotAsk=\"true\" synchronizationState=\"SYNCHRONIZE\">\n    <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>\n    <execution />\n  </component>\n  <component name=\"Git.Settings\">\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\n  </component>\n  <component name=\"PhpWorkspaceProjectConfiguration\">\n    <include_path>\n      <path value=\"$PROJECT_DIR$/vendor/symfony/polyfill-intl-normalizer\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/dependency-injection\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/polyfill-intl-grapheme\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/console\" />\n      <path value=\"$PROJECT_DIR$/vendor/psr/log\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/polyfill-php73\" />\n      <path value=\"$PROJECT_DIR$/vendor/psr/cache\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/framework-bundle\" />\n      <path value=\"$PROJECT_DIR$/vendor/psr/container\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/event-dispatcher-contracts\" />\n      <path value=\"$PROJECT_DIR$/vendor/psr/event-dispatcher\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/http-kernel\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/routing\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/polyfill-php80\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/var-dumper\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/error-handler\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/string\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/finder\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/flex\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/yaml\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/cache\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/dotenv\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/polyfill-mbstring\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/service-contracts\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/config\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/event-dispatcher\" />\n      <path value=\"$PROJECT_DIR$/vendor/composer\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/deprecation-contracts\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/var-exporter\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/http-foundation\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/filesystem\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/cache-contracts\" />\n      <path value=\"$PROJECT_DIR$/vendor/ocramius/proxy-manager\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/persistence\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/annotations\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/dbal\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/lexer\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/migrations\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/common\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/doctrine-bundle\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/inflector\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/doctrine-migrations-bundle\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/collections\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/cache\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/sql-formatter\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/reflection\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/event-manager\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/orm\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/instantiator\" />\n      <path value=\"$PROJECT_DIR$/vendor/zendframework/zend-eventmanager\" />\n      <path value=\"$PROJECT_DIR$/vendor/zendframework/zend-code\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/doctrine-bridge\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/stopwatch\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/maker-bundle\" />\n      <path value=\"$PROJECT_DIR$/vendor/nikic/php-parser\" />\n      <path value=\"$PROJECT_DIR$/vendor/sensio/framework-extra-bundle\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/property-access\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/property-info\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/security-core\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/security-csrf\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/security-bundle\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/security-http\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/security-guard\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/validator\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/translation-contracts\" />\n      <path value=\"$PROJECT_DIR$/vendor/lexik/jwt-authentication-bundle\" />\n      <path value=\"$PROJECT_DIR$/vendor/namshi/jose\" />\n      <path value=\"$PROJECT_DIR$/vendor/lcobucci/jwt\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/doctrine-fixtures-bundle\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/data-fixtures\" />\n    </include_path>\n  </component>\n  <component name=\"ProjectId\" id=\"1geYPclRfqYzpeNcYJLWDHfUvhv\" />\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\">\n    <property name=\"ASKED_ADD_EXTERNAL_FILES\" value=\"true\" />\n    <property name=\"RunOnceActivity.OpenProjectViewOnStart\" value=\"true\" />\n    <property name=\"WebServerToolWindowFactoryState\" value=\"false\" />\n    <property name=\"last_opened_file_path\" value=\"$PROJECT_DIR$/src\" />\n    <property name=\"nodejs_package_manager_path\" value=\"npm\" />\n    <property name=\"php.override.implement.member.chooser.php.doc\" value=\"NONE\" />\n    <property name=\"settings.editor.selected.configurable\" value=\"reference.webide.settings.project.settings.php\" />\n    <property name=\"vue.rearranger.settings.migration\" value=\"true\" />\n  </component>\n  <component name=\"RecentsManager\">\n    <key name=\"CopyFile.RECENT_KEYS\">\n      <recent name=\"$PROJECT_DIR$/src/Controller\" />\n      <recent name=\"$PROJECT_DIR$\" />\n      <recent name=\"$PROJECT_DIR$/src/Repository\" />\n      <recent name=\"$PROJECT_DIR$/src/Entity\" />\n    </key>\n    <key name=\"MoveFile.RECENT_KEYS\">\n      <recent name=\"$PROJECT_DIR$/public\" />\n    </key>\n  </component>\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\n      <changelist id=\"fc4ab864-d8ac-496a-b097-e575a4e8070f\" name=\"Default Changelist\" comment=\"\" />\n      <created>1598476501452</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1598476501452</updated>\n      <workItem from=\"1598476502753\" duration=\"462000\" />\n      <workItem from=\"1598721590317\" duration=\"5014000\" />\n      <workItem from=\"1598785152255\" duration=\"28769000\" />\n      <workItem from=\"1598872760136\" duration=\"843000\" />\n      <workItem from=\"1598873891629\" duration=\"596000\" />\n      <workItem from=\"1598995083164\" duration=\"302000\" />\n      <workItem from=\"1599044386533\" duration=\"1834000\" />\n      <workItem from=\"1599081096420\" duration=\"5476000\" />\n      <workItem from=\"1599216776207\" duration=\"505000\" />\n      <workItem from=\"1599324174761\" duration=\"30664000\" />\n      <workItem from=\"1599496155191\" duration=\"10761000\" />\n      <workItem from=\"1599590954019\" duration=\"5352000\" />\n      <workItem from=\"1599673475708\" duration=\"9113000\" />\n      <workItem from=\"1599736236977\" duration=\"3306000\" />\n      <workItem from=\"1599849603805\" duration=\"9322000\" />\n      <workItem from=\"1599903978650\" duration=\"604000\" />\n      <workItem from=\"1600004258729\" duration=\"2551000\" />\n      <workItem from=\"1600167713915\" duration=\"2208000\" />\n      <workItem from=\"1600205910685\" duration=\"187000\" />\n      <workItem from=\"1600254897576\" duration=\"5181000\" />\n      <workItem from=\"1600341630972\" duration=\"28000\" />\n      <workItem from=\"1600375428460\" duration=\"5668000\" />\n      <workItem from=\"1600426893949\" duration=\"673000\" />\n      <workItem from=\"1600802927948\" duration=\"2984000\" />\n      <workItem from=\"1600860540652\" duration=\"1208000\" />\n      <workItem from=\"1600899652411\" duration=\"306000\" />\n      <workItem from=\"1601322403019\" duration=\"427000\" />\n    </task>\n    <task id=\"LOCAL-00001\" summary=\"add lexik jwt\">\n      <created>1600277721088</created>\n      <option name=\"number\" value=\"00001\" />\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1600277721088</updated>\n    </task>\n    <option name=\"localTasksCounter\" value=\"2\" />\n    <servers />\n  </component>\n  <component name=\"TypeScriptGeneratedFilesManager\">\n    <option name=\"version\" value=\"3\" />\n  </component>\n  <component name=\"Vcs.Log.Tabs.Properties\">\n    <option name=\"TAB_STATES\">\n      <map>\n        <entry key=\"MAIN\">\n          <value>\n            <State />\n          </value>\n        </entry>\n      </map>\n    </option>\n    <option name=\"oldMeFiltersMigrated\" value=\"true\" />\n  </component>\n  <component name=\"VcsManagerConfiguration\">\n    <MESSAGE value=\"add lexik jwt\" />\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"add lexik jwt\" />\n  </component>\n  <component name=\"WindowStateProjectService\">\n    <state x=\"2693\" y=\"234\" width=\"441\" height=\"659\" key=\"#com.intellij.ide.util.MemberChooser\" timestamp=\"1599348007940\">\n      <screen x=\"1920\" y=\"0\" width=\"1920\" height=\"1080\" />\n    </state>\n    <state x=\"2693\" y=\"234\" width=\"441\" height=\"659\" key=\"#com.intellij.ide.util.MemberChooser/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080\" timestamp=\"1599348007940\" />\n    <state x=\"2637\" y=\"311\" width=\"524\" height=\"491\" key=\"#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog\" timestamp=\"1599388445484\">\n      <screen x=\"1920\" y=\"0\" width=\"1920\" height=\"1080\" />\n    </state>\n    <state x=\"2637\" y=\"311\" width=\"524\" height=\"491\" key=\"#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080\" timestamp=\"1599388445484\" />\n    <state x=\"2627\" y=\"334\" width=\"424\" height=\"491\" key=\"FileChooserDialogImpl\" timestamp=\"1601322420115\">\n      <screen x=\"1920\" y=\"0\" width=\"1920\" height=\"1080\" />\n    </state>\n    <state x=\"2627\" y=\"334\" width=\"424\" height=\"491\" key=\"FileChooserDialogImpl/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080\" timestamp=\"1601322420115\" />\n    <state x=\"2328\" y=\"188\" width=\"1022\" height=\"737\" key=\"SettingsEditor\" timestamp=\"1599769891342\">\n      <screen x=\"1920\" y=\"0\" width=\"1920\" height=\"1080\" />\n    </state>\n    <state x=\"2328\" y=\"188\" width=\"1022\" height=\"737\" key=\"SettingsEditor/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080\" timestamp=\"1599769891342\" />\n    <state x=\"2499\" y=\"275\" width=\"800\" height=\"563\" key=\"Vcs.Push.Dialog.v2\" timestamp=\"1600277726456\">\n      <screen x=\"1920\" y=\"0\" width=\"1920\" height=\"1080\" />\n    </state>\n    <state x=\"2499\" y=\"275\" width=\"800\" height=\"563\" key=\"Vcs.Push.Dialog.v2/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080\" timestamp=\"1600277726456\" />\n    <state x=\"2135\" y=\"101\" width=\"1477\" height=\"1517\" key=\"com.intellij.history.integration.ui.views.FileHistoryDialog\" timestamp=\"1600812088627\">\n      <screen x=\"1920\" y=\"0\" width=\"1920\" height=\"1080\" />\n    </state>\n    <state x=\"2068\" y=\"127\" width=\"1672\" height=\"853\" key=\"com.intellij.history.integration.ui.views.FileHistoryDialog/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080\" timestamp=\"1600382508610\" />\n    <state x=\"2135\" y=\"101\" width=\"1477\" height=\"1517\" key=\"com.intellij.history.integration.ui.views.FileHistoryDialog/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@3840.0.1080.1920\" timestamp=\"1600812088627\" />\n    <state x=\"2110\" y=\"116\" width=\"1086\" height=\"668\" key=\"find.popup\" timestamp=\"1600376426802\">\n      <screen x=\"1920\" y=\"0\" width=\"1920\" height=\"1080\" />\n    </state>\n    <state x=\"2110\" y=\"116\" width=\"1086\" height=\"668\" key=\"find.popup/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080\" timestamp=\"1600376426802\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/workspace.xml	(revision dd9d15e84178b7997e20b990341411cfa14154f9)
++++ .idea/workspace.xml	(date 1603234031277)
+@@ -16,12 +16,20 @@
+         <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+       </path>
+     </expand>
+-    <select />
++    <select>
++      <path>
++        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
++        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
++        <item name="BRANCH:product_endpoints" type="e8cecc67:BranchNodeDescriptor" />
++      </path>
++    </select>
+   </component>
+   <component name="ChangeListManager">
+     <list default="true" id="fc4ab864-d8ac-496a-b097-e575a4e8070f" name="Default Changelist" comment="">
+-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/bilemo.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/bilemo.iml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/Controller/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/UserController.php" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -33,6 +41,11 @@
+     <execution />
+   </component>
+   <component name="Git.Settings">
++    <option name="RECENT_BRANCH_BY_REPOSITORY">
++      <map>
++        <entry key="$PROJECT_DIR$" value="get_request" />
++      </map>
++    </option>
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+   </component>
+   <component name="PhpWorkspaceProjectConfiguration">
+@@ -107,6 +120,12 @@
+       <path value="$PROJECT_DIR$/vendor/lcobucci/jwt" />
+       <path value="$PROJECT_DIR$/vendor/doctrine/doctrine-fixtures-bundle" />
+       <path value="$PROJECT_DIR$/vendor/doctrine/data-fixtures" />
++      <path value="$PROJECT_DIR$/vendor/symfony/serializer" />
++      <path value="$PROJECT_DIR$/vendor/phpdocumentor/type-resolver" />
++      <path value="$PROJECT_DIR$/vendor/phpdocumentor/reflection-docblock" />
++      <path value="$PROJECT_DIR$/vendor/phpdocumentor/reflection-common" />
++      <path value="$PROJECT_DIR$/vendor/webmozart/assert" />
++      <path value="$PROJECT_DIR$/vendor/symfony/expression-language" />
+     </include_path>
+   </component>
+   <component name="ProjectId" id="1geYPclRfqYzpeNcYJLWDHfUvhv" />
+@@ -118,21 +137,22 @@
+     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+     <property name="WebServerToolWindowFactoryState" value="false" />
+-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src" />
++    <property name="last_opened_file_path" value="$PROJECT_DIR$/../snowtricks" />
+     <property name="nodejs_package_manager_path" value="npm" />
+     <property name="php.override.implement.member.chooser.php.doc" value="NONE" />
+     <property name="settings.editor.selected.configurable" value="reference.webide.settings.project.settings.php" />
+     <property name="vue.rearranger.settings.migration" value="true" />
+   </component>
+   <component name="RecentsManager">
++    <key name="MoveFile.RECENT_KEYS">
++      <recent name="$PROJECT_DIR$/public" />
++    </key>
+     <key name="CopyFile.RECENT_KEYS">
+       <recent name="$PROJECT_DIR$/src/Controller" />
++      <recent name="$PROJECT_DIR$/src" />
+       <recent name="$PROJECT_DIR$" />
+       <recent name="$PROJECT_DIR$/src/Repository" />
+       <recent name="$PROJECT_DIR$/src/Entity" />
+-    </key>
+-    <key name="MoveFile.RECENT_KEYS">
+-      <recent name="$PROJECT_DIR$/public" />
+     </key>
+   </component>
+   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+@@ -170,6 +190,14 @@
+       <workItem from="1600860540652" duration="1208000" />
+       <workItem from="1600899652411" duration="306000" />
+       <workItem from="1601322403019" duration="427000" />
++      <workItem from="1601896979104" duration="1926000" />
++      <workItem from="1601983775913" duration="3279000" />
++      <workItem from="1602021742158" duration="5456000" />
++      <workItem from="1602533016942" duration="10029000" />
++      <workItem from="1602674265513" duration="3951000" />
++      <workItem from="1603136054281" duration="3089000" />
++      <workItem from="1603192613667" duration="3704000" />
++      <workItem from="1603227598363" duration="6370000" />
+     </task>
+     <task id="LOCAL-00001" summary="add lexik jwt">
+       <created>1600277721088</created>
+@@ -178,7 +206,84 @@
+       <option name="project" value="LOCAL" />
+       <updated>1600277721088</updated>
+     </task>
+-    <option name="localTasksCounter" value="2" />
++    <task id="LOCAL-00002" summary="Create controller&#10;create get function">
++      <created>1601923866609</created>
++      <option name="number" value="00002" />
++      <option name="presentableId" value="LOCAL-00002" />
++      <option name="project" value="LOCAL" />
++      <updated>1601923866609</updated>
++    </task>
++    <task id="LOCAL-00003" summary="add voter">
++      <created>1603136879889</created>
++      <option name="number" value="00003" />
++      <option name="presentableId" value="LOCAL-00003" />
++      <option name="project" value="LOCAL" />
++      <updated>1603136879889</updated>
++    </task>
++    <task id="LOCAL-00004" summary="ignore /idea">
++      <created>1603227267394</created>
++      <option name="number" value="00004" />
++      <option name="presentableId" value="LOCAL-00004" />
++      <option name="project" value="LOCAL" />
++      <updated>1603227267394</updated>
++    </task>
++    <task id="LOCAL-00005" summary="ignore /idea">
++      <created>1603227525564</created>
++      <option name="number" value="00005" />
++      <option name="presentableId" value="LOCAL-00005" />
++      <option name="project" value="LOCAL" />
++      <updated>1603227525564</updated>
++    </task>
++    <task id="LOCAL-00006" summary="ignore /idea">
++      <created>1603227569258</created>
++      <option name="number" value="00006" />
++      <option name="presentableId" value="LOCAL-00006" />
++      <option name="project" value="LOCAL" />
++      <updated>1603227569258</updated>
++    </task>
++    <task id="LOCAL-00007" summary="get products endpoint">
++      <created>1603228737740</created>
++      <option name="number" value="00007" />
++      <option name="presentableId" value="LOCAL-00007" />
++      <option name="project" value="LOCAL" />
++      <updated>1603228737740</updated>
++    </task>
++    <task id="LOCAL-00008" summary="get product/id endpoint">
++      <created>1603231329914</created>
++      <option name="number" value="00008" />
++      <option name="presentableId" value="LOCAL-00008" />
++      <option name="project" value="LOCAL" />
++      <updated>1603231329914</updated>
++    </task>
++    <task id="LOCAL-00009" summary="post product endpoint">
++      <created>1603231466601</created>
++      <option name="number" value="00009" />
++      <option name="presentableId" value="LOCAL-00009" />
++      <option name="project" value="LOCAL" />
++      <updated>1603231466601</updated>
++    </task>
++    <task id="LOCAL-00010" summary="post product endpoint">
++      <created>1603231500105</created>
++      <option name="number" value="00010" />
++      <option name="presentableId" value="LOCAL-00010" />
++      <option name="project" value="LOCAL" />
++      <updated>1603231500105</updated>
++    </task>
++    <task id="LOCAL-00011" summary="delete product endpoint">
++      <created>1603232931308</created>
++      <option name="number" value="00011" />
++      <option name="presentableId" value="LOCAL-00011" />
++      <option name="project" value="LOCAL" />
++      <updated>1603232931308</updated>
++    </task>
++    <task id="LOCAL-00012" summary="update voter">
++      <created>1603233284286</created>
++      <option name="number" value="00012" />
++      <option name="presentableId" value="LOCAL-00012" />
++      <option name="project" value="LOCAL" />
++      <updated>1603233284286</updated>
++    </task>
++    <option name="localTasksCounter" value="13" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+@@ -189,7 +294,19 @@
+       <map>
+         <entry key="MAIN">
+           <value>
+-            <State />
++            <State>
++              <option name="FILTERS">
++                <map>
++                  <entry key="branch">
++                    <value>
++                      <list>
++                        <option value="product_endpoints" />
++                      </list>
++                    </value>
++                  </entry>
++                </map>
++              </option>
++            </State>
+           </value>
+         </entry>
+       </map>
+@@ -198,29 +315,50 @@
+   </component>
+   <component name="VcsManagerConfiguration">
+     <MESSAGE value="add lexik jwt" />
+-    <option name="LAST_COMMIT_MESSAGE" value="add lexik jwt" />
++    <MESSAGE value="Create controller&#10;create get function" />
++    <MESSAGE value="add voter" />
++    <MESSAGE value="ignore /idea" />
++    <MESSAGE value="get products endpoint" />
++    <MESSAGE value="get product/id endpoint" />
++    <MESSAGE value="post product endpoint" />
++    <MESSAGE value="delete product endpoint" />
++    <MESSAGE value="update voter" />
++    <option name="LAST_COMMIT_MESSAGE" value="update voter" />
+   </component>
+   <component name="WindowStateProjectService">
+     <state x="2693" y="234" width="441" height="659" key="#com.intellij.ide.util.MemberChooser" timestamp="1599348007940">
+       <screen x="1920" y="0" width="1920" height="1080" />
+     </state>
+     <state x="2693" y="234" width="441" height="659" key="#com.intellij.ide.util.MemberChooser/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080" timestamp="1599348007940" />
+-    <state x="2637" y="311" width="524" height="491" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1599388445484">
++    <state x="2637" y="311" width="524" height="491" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1603231534435">
++      <screen x="1920" y="0" width="1920" height="1080" />
++    </state>
++    <state x="2637" y="311" width="524" height="491" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080" timestamp="1603231534435" />
++    <state x="4243" y="553" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@3840.0.1080.1920" timestamp="1601486298311" />
++    <state x="2068" y="127" width="1672" height="853" key="DiffContextDialog" timestamp="1603227484212">
+       <screen x="1920" y="0" width="1920" height="1080" />
+     </state>
+-    <state x="2637" y="311" width="524" height="491" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080" timestamp="1599388445484" />
+-    <state x="2627" y="334" width="424" height="491" key="FileChooserDialogImpl" timestamp="1601322420115">
++    <state x="2068" y="127" width="1672" height="853" key="DiffContextDialog/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080" timestamp="1603227484212" />
++    <state x="2627" y="334" width="424" height="491" key="FileChooserDialogImpl" timestamp="1602622912195">
+       <screen x="1920" y="0" width="1920" height="1080" />
+     </state>
+-    <state x="2627" y="334" width="424" height="491" key="FileChooserDialogImpl/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080" timestamp="1601322420115" />
++    <state x="2627" y="334" width="424" height="491" key="FileChooserDialogImpl/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080" timestamp="1602622912195" />
++    <state x="2626" y="273" width="577" height="568" key="NewPhpClassDialog" timestamp="1602630974525">
++      <screen x="1920" y="0" width="1920" height="1080" />
++    </state>
++    <state x="2626" y="273" width="577" height="568" key="NewPhpClassDialog/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080" timestamp="1602630974525" />
+     <state x="2328" y="188" width="1022" height="737" key="SettingsEditor" timestamp="1599769891342">
+       <screen x="1920" y="0" width="1920" height="1080" />
+     </state>
+     <state x="2328" y="188" width="1022" height="737" key="SettingsEditor/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080" timestamp="1599769891342" />
+-    <state x="2499" y="275" width="800" height="563" key="Vcs.Push.Dialog.v2" timestamp="1600277726456">
++    <state x="2747" y="468" width="303" height="178" key="VCS.ChangelistChooser" timestamp="1603226706376">
+       <screen x="1920" y="0" width="1920" height="1080" />
+     </state>
+-    <state x="2499" y="275" width="800" height="563" key="Vcs.Push.Dialog.v2/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080" timestamp="1600277726456" />
++    <state x="2747" y="468" width="303" height="178" key="VCS.ChangelistChooser/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080" timestamp="1603226706376" />
++    <state x="2499" y="275" width="800" height="563" key="Vcs.Push.Dialog.v2" timestamp="1603232935730">
++      <screen x="1920" y="0" width="1920" height="1080" />
++    </state>
++    <state x="2499" y="275" width="800" height="563" key="Vcs.Push.Dialog.v2/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080" timestamp="1603232935730" />
+     <state x="2135" y="101" width="1477" height="1517" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1600812088627">
+       <screen x="1920" y="0" width="1920" height="1080" />
+     </state>
+@@ -230,5 +368,9 @@
+       <screen x="1920" y="0" width="1920" height="1080" />
+     </state>
+     <state x="2110" y="116" width="1086" height="668" key="find.popup/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080" timestamp="1600376426802" />
++    <state x="2629" y="247" width="539" height="619" key="git4idea.branch.GitSmartOperationDialog" timestamp="1603226344933">
++      <screen x="1920" y="0" width="1920" height="1080" />
++    </state>
++    <state x="2629" y="247" width="539" height="619" key="git4idea.branch.GitSmartOperationDialog/1920.0.1920.1080/3840.0.1080.1920/0.27.1920.1053@1920.0.1920.1080" timestamp="1603226344933" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: .idea/php.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"PhpIncludePathManager\">\n    <include_path>\n      <path value=\"$PROJECT_DIR$/vendor/symfony/polyfill-intl-normalizer\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/dependency-injection\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/polyfill-intl-grapheme\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/console\" />\n      <path value=\"$PROJECT_DIR$/vendor/psr/log\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/polyfill-php73\" />\n      <path value=\"$PROJECT_DIR$/vendor/psr/cache\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/framework-bundle\" />\n      <path value=\"$PROJECT_DIR$/vendor/psr/container\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/event-dispatcher-contracts\" />\n      <path value=\"$PROJECT_DIR$/vendor/psr/event-dispatcher\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/http-kernel\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/routing\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/polyfill-php80\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/var-dumper\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/error-handler\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/string\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/finder\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/flex\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/yaml\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/cache\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/dotenv\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/polyfill-mbstring\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/service-contracts\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/config\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/event-dispatcher\" />\n      <path value=\"$PROJECT_DIR$/vendor/composer\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/deprecation-contracts\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/var-exporter\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/http-foundation\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/filesystem\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/cache-contracts\" />\n      <path value=\"$PROJECT_DIR$/vendor/ocramius/proxy-manager\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/persistence\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/annotations\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/dbal\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/lexer\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/migrations\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/common\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/doctrine-bundle\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/inflector\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/doctrine-migrations-bundle\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/collections\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/cache\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/sql-formatter\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/reflection\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/event-manager\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/orm\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/instantiator\" />\n      <path value=\"$PROJECT_DIR$/vendor/zendframework/zend-eventmanager\" />\n      <path value=\"$PROJECT_DIR$/vendor/zendframework/zend-code\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/doctrine-bridge\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/stopwatch\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/maker-bundle\" />\n      <path value=\"$PROJECT_DIR$/vendor/nikic/php-parser\" />\n      <path value=\"$PROJECT_DIR$/vendor/sensio/framework-extra-bundle\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/property-access\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/property-info\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/security-core\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/security-csrf\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/security-bundle\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/security-http\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/security-guard\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/validator\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/translation-contracts\" />\n      <path value=\"$PROJECT_DIR$/vendor/lexik/jwt-authentication-bundle\" />\n      <path value=\"$PROJECT_DIR$/vendor/namshi/jose\" />\n      <path value=\"$PROJECT_DIR$/vendor/lcobucci/jwt\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/doctrine-fixtures-bundle\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/data-fixtures\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/serializer\" />\n      <path value=\"$PROJECT_DIR$/vendor/phpdocumentor/type-resolver\" />\n      <path value=\"$PROJECT_DIR$/vendor/phpdocumentor/reflection-docblock\" />\n      <path value=\"$PROJECT_DIR$/vendor/phpdocumentor/reflection-common\" />\n      <path value=\"$PROJECT_DIR$/vendor/webmozart/assert\" />\n    </include_path>\n  </component>\n  <component name=\"PhpProjectSharedConfiguration\" php_language_level=\"7.3\" />\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/php.xml	(revision dd9d15e84178b7997e20b990341411cfa14154f9)
++++ .idea/php.xml	(date 1602695654445)
+@@ -77,6 +77,7 @@
+       <path value="$PROJECT_DIR$/vendor/phpdocumentor/reflection-docblock" />
+       <path value="$PROJECT_DIR$/vendor/phpdocumentor/reflection-common" />
+       <path value="$PROJECT_DIR$/vendor/webmozart/assert" />
++      <path value="$PROJECT_DIR$/vendor/symfony/expression-language" />
+     </include_path>
+   </component>
+   <component name="PhpProjectSharedConfiguration" php_language_level="7.3" />
+Index: .idea/bilemo.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<module type=\"WEB_MODULE\" version=\"4\">\n  <component name=\"NewModuleRootManager\">\n    <content url=\"file://$MODULE_DIR$\">\n      <sourceFolder url=\"file://$MODULE_DIR$/tests\" isTestSource=\"true\" packagePrefix=\"App\\Tests\\\" />\n      <sourceFolder url=\"file://$MODULE_DIR$/src\" isTestSource=\"false\" packagePrefix=\"App\\\" />\n      <sourceFolder url=\"file://$MODULE_DIR$/spec\" isTestSource=\"true\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/composer\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/doctrine/annotations\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/doctrine/cache\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/doctrine/collections\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/doctrine/common\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/doctrine/dbal\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/doctrine/doctrine-bundle\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/doctrine/doctrine-migrations-bundle\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/doctrine/event-manager\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/doctrine/inflector\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/doctrine/instantiator\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/doctrine/lexer\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/doctrine/migrations\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/doctrine/orm\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/doctrine/persistence\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/doctrine/reflection\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/doctrine/sql-formatter\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/lcobucci/jwt\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/lexik/jwt-authentication-bundle\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/namshi/jose\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/nikic/php-parser\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/ocramius/proxy-manager\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/phpdocumentor/reflection-common\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/phpdocumentor/reflection-docblock\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/phpdocumentor/type-resolver\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/psr/cache\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/psr/container\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/psr/event-dispatcher\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/psr/log\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/sensio/framework-extra-bundle\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/cache\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/cache-contracts\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/config\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/console\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/dependency-injection\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/deprecation-contracts\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/doctrine-bridge\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/dotenv\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/error-handler\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/event-dispatcher\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/event-dispatcher-contracts\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/filesystem\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/finder\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/flex\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/framework-bundle\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/http-foundation\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/http-kernel\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/maker-bundle\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/polyfill-intl-grapheme\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/polyfill-intl-normalizer\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/polyfill-mbstring\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/polyfill-php73\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/polyfill-php80\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/property-access\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/property-info\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/routing\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/security-bundle\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/security-core\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/security-csrf\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/security-guard\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/security-http\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/serializer\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/service-contracts\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/stopwatch\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/string\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/translation-contracts\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/validator\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/var-dumper\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/var-exporter\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/symfony/yaml\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/webmozart/assert\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/zendframework/zend-code\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/vendor/zendframework/zend-eventmanager\" />\n    </content>\n    <orderEntry type=\"inheritedJdk\" />\n    <orderEntry type=\"sourceFolder\" forTests=\"false\" />\n  </component>\n</module>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/bilemo.iml	(revision dd9d15e84178b7997e20b990341411cfa14154f9)
++++ .idea/bilemo.iml	(date 1602695743039)
+@@ -46,6 +46,7 @@
+       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/error-handler" />
+       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/event-dispatcher" />
+       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/event-dispatcher-contracts" />
++      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/expression-language" />
+       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/filesystem" />
+       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/finder" />
+       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/flex" />
