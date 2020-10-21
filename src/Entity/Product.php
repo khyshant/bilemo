@@ -6,6 +6,7 @@ use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -17,42 +18,49 @@ class Product
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"get"})
      */
     private $id;
 
     /**
      * @var string
      * @ORM\Column(name="name", type="string", length=800, nullable=true)
+     * @Groups({"get"})
      */
     private $name;
 
     /**
      * @var string
      * @ORM\Column(name="description", type="string", length=800, nullable=true)
+     * @Groups({"get"})
      */
     private $description;
 
     /**
      * @var float
      * @ORM\Column(name="height", type="float", length=800, nullable=true)
+     * @Groups({"get"})
      */
     private $height;
 
     /**
      * @var float
      * @ORM\Column(name="weight", type="float", length=800, nullable=true)
+     * @Groups({"get"})
      */
     private $weight;
 
     /**
      * @var float
      * @ORM\Column(name="stock", type="float", length=800, nullable=true)
+     * @Groups({"get"})
      */
     private $stock;
 
     /**
      * @var string
      * @ORM\Column(name="price", type="float", length=800, nullable=true)
+     * @Groups({"get"})
      */
     private $price;
 
